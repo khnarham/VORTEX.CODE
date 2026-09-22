@@ -1,26 +1,68 @@
 @import "tailwindcss";
+/* src/app/globals.css ke shuru mein */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolled iframe {
+  pointer-events: none;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-space: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-vortex-bg: #0e0e10;    /* Charcoal Black */
+  --color-vortex-zinc: #3f3f46;  /* Zinc Border */
+  --color-vortex-green: #32CD32; /* Neon Green Accent */
+  --color-vortex-text: #a1a1aa;  /* Subtitle Text */
+  --color-vortex-bright: #ffffff; /* White Text */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  background-color: var(--color-vortex-bg);
+  color: var(--color-vortex-text);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-vortex-bg);
+  font-family: var(--font-sans), sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scrollbar for Zinc Theme */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0e0e10; }
+::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #32CD32; }
+
+/* Glitch Animation Keyframes for Entrance */
+@keyframes glitch {
+  2%, 64% { transform: translate(2px, 0) skew(0deg); }
+  4%, 60% { transform: translate(-2px, 0) skew(0deg); }
+  62% { transform: translate(0, 0) skew(5deg); }
+}
+
+.glitch-effect {
+  animation: glitch 1s infinite;
+  animation-timing-function: steps(2, end);
 }
