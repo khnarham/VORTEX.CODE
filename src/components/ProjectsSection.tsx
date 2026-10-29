@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 import { 
   FolderGit2, 
   ArrowUpRight, 
@@ -49,28 +50,28 @@ const projects: Project[] = [
       { label: "State Sync", value: "Custom Logic with DB Transactions" },
       { label: "Database", value: "Relational ACID" }
     ],
-    githubUrl: "https://doctor-appointment-frontend-two-xi.vercel.app",
+    githubUrl: "https://github.com/arham-khan",
     liveUrl: "#",
     detailedNote: "Developed with strict separation of concerns, secure JWT authentication, and transactional email verification via Brevo/Resend.",
     images: [
-      { src: "screenshot_20261029_215337.png", caption: "Landing Page & System Overview" },
-      { src: "screenshot_20261029_215358.png", caption: "Doctor Directory & Search Listing" },
-      { src: "screenshot_20261029_215425.png", caption: "Patient Appointment History & Portal" },
-      { src: "screenshot_20261030_012953.png", caption: "Administrative Portal Authentication" },
-      { src: "screenshot_20261029_215554.png", caption: "Centralized Admin Analytics Dashboard" },
-      { src: "screenshot_20261029_215620.png", caption: "Medical Specialization Management" },
-      { src: "screenshot_20261029_215703.png", caption: "Role-Based Doctor Invitation System" },
-      { src: "screenshot_20261029_215719.png", caption: "Staff & Receptionist Invitation Portal" },
-      { src: "screenshot_20261029_215814.png", caption: "JWT Token Authentication & Verification Flow" },
-      { src: "screenshot_20261029_220212.png", caption: "Doctor Practice Management Dashboard" },
-      { src: "screenshot_20261029_215938.png", caption: "Doctor Schedule & Appointment Roster" },
-      { src: "screenshot_20261029_215955.png", caption: "Doctor Availability Calendar" },
-      { src: "screenshot_20261029_220221.png", caption: "Slot Management & Availability Builder" },
-      { src: "screenshot_20261029_220448.png", caption: "Receptionist Walk-In Patient Registration" },
-      { src: "screenshot_20261029_220552.png", caption: "On-Site Walk-In Booking Interface" },
-      { src: "screenshot_20261029_220807.png", caption: "Self-Service Patient Booking Flow" },
-      { src: "screenshot_20261030_010409.png", caption: "Tokenized Doctor Invitation Onboarding" },
-      { src: "screenshot_20261030_010435.png", caption: "Tokenized Receptionist Invitation Onboarding" }
+      { src: "/screenshot_20261029_215337.png", caption: "Landing Page & System Overview" },
+      { src: "/screenshot_20261029_215358.png", caption: "Doctor Directory & Search Listing" },
+      { src: "/screenshot_20261029_215425.png", caption: "Patient Appointment History & Portal" },
+      { src: "/screenshot_20261030_012953.png", caption: "Administrative Portal Authentication" },
+      { src: "/screenshot_20261029_215554.png", caption: "Centralized Admin Analytics Dashboard" },
+      { src: "/screenshot_20261029_215620.png", caption: "Medical Specialization Management" },
+      { src: "/screenshot_20261029_215703.png", caption: "Role-Based Doctor Invitation System" },
+      { src: "/screenshot_20261029_215719.png", caption: "Staff & Receptionist Invitation Portal" },
+      { src: "/screenshot_20261029_215814.png", caption: "JWT Token Authentication & Verification Flow" },
+      { src: "/screenshot_20261029_220212.png", caption: "Doctor Practice Management Dashboard" },
+      { src: "/screenshot_20261029_215938.png", caption: "Doctor Schedule & Appointment Roster" },
+      { src: "/screenshot_20261029_215955.png", caption: "Doctor Availability Calendar" },
+      { src: "/screenshot_20261029_220221.png", caption: "Slot Management & Availability Builder" },
+      { src: "/screenshot_20261029_220448.png", caption: "Receptionist Walk-In Patient Registration" },
+      { src: "/screenshot_20261029_220552.png", caption: "On-Site Walk-In Booking Interface" },
+      { src: "/screenshot_20261029_220807.png", caption: "Self-Service Patient Booking Flow" },
+      { src: "/screenshot_20261030_010409.png", caption: "Tokenized Doctor Invitation Onboarding" },
+      { src: "/screenshot_20261030_010435.png", caption: "Tokenized Receptionist Invitation Onboarding" }
     ]
   },
   {
@@ -82,21 +83,21 @@ const projects: Project[] = [
     tags: ["Next.js (App Router)", "React", "TypeScript", "Tailwind CSS", "Stripe API", "MongoDB", "PostgreSQL"],
     metrics: [
       { label: "Payments", value: "Stripe Subscriptions & Webhooks" },
-      { label: "Database Layer", value: "MongoDB" },
+      { label: "Database Layer", value: "MongoDB & PostgreSQL Hybrid" },
       { label: "Authentication", value: "Role-Based NextAuth / JWT" }
     ],
     githubUrl: "https://jobs-portal-s5jz.vercel.app",
     liveUrl: "#",
     detailedNote: "Features dynamic Stripe checkout sessions with webhook verification for instant job boosting and subscription management.",
     images: [
-      { src: "screenshot_20261029_213319.png", caption: "OAuth Authentication & Secure Sign-In" },
-      { src: "screenshot_20261029_213355.png", caption: "User Role & Preference Selection" },
-      { src: "screenshot_20261029_213410.png", caption: "Company Profile & Employer Setup" },
-      { src: "screenshot_20261029_213524.png", caption: "Job Listing Creation Interface" },
-      { src: "screenshot_20261029_213615.png", caption: "Stripe Secure Checkout & Payment Integration" },
-      { src: "screenshot_20261029_213701.png", caption: "Paginated Job Directory with Advanced Filters" },
-      { src: "screenshot_20261029_213732.png", caption: "Comprehensive Job Detail View" },
-      { src: "screenshot_20261029_213750.png", caption: "Employer Job Management & Operations" }
+      { src: "/screenshot_20261029_213319.png", caption: "OAuth Authentication & Secure Sign-In" },
+      { src: "/screenshot_20261029_213355.png", caption: "User Role & Preference Selection" },
+      { src: "/screenshot_20261029_213410.png", caption: "Company Profile & Employer Setup" },
+      { src: "/screenshot_20261029_213524.png", caption: "Job Listing Creation Interface" },
+      { src: "/screenshot_20261029_213615.png", caption: "Stripe Secure Checkout & Payment Integration" },
+      { src: "/screenshot_20261029_213701.png", caption: "Paginated Job Directory with Advanced Filters" },
+      { src: "/screenshot_20261029_213732.png", caption: "Comprehensive Job Detail View" },
+      { src: "/screenshot_20261029_213750.png", caption: "Employer Job Management & Operations" }
     ]
   },
   {
@@ -105,7 +106,7 @@ const projects: Project[] = [
     title: "CaseCobra - Custom Phone Case Studio & Checkout",
     description: "An interactive e-commerce application where users can import high-res images, crop and manipulate designs directly on 3D mobile phone case canvas, and seamlessly place custom orders with fully integrated Stripe payments.",
     icon: <Smartphone className="w-6 h-6" />,
-    tags: ["Next.js (App Router)", "React", "TypeScript", "Tailwind CSS", "React Cropper", "Stripe Checkout", "MongoDB"],
+    tags: ["Next.js (App Router)", "React", "TypeScript", "Tailwind CSS", "React Cropper", "Stripe Checkout", "MongoDB", "PostgreSQL"],
     metrics: [
       { label: "Canvas Engine", value: "Mobile Interactive Cropper" },
       { label: "Payment Checkout", value: "Stripe Hosted Checkout" },
@@ -115,12 +116,12 @@ const projects: Project[] = [
     liveUrl: "#",
     detailedNote: "Includes an intuitive mobile-first image positioning tool with automatic canvas overlay, export generation, and Stripe webhooks.",
     images: [
-      { src: "screenshot_20261029_211628.png", caption: "Storefront Home Page & Featured Catalog" },
-      { src: "screenshot_20261029_211853.png", caption: "Custom Design Selection & Configuration" },
-      { src: "screenshot_20261029_212032.png", caption: "Streamlined Checkout & Order Summary" },
-      { src: "screenshot_20261029_212059.png", caption: "Stripe Secure Payment Integration" },
-      { src: "screenshot_20261029_212204.png", caption: "Order Tracking & Detailed Breakdown" },
-      { src: "screenshot_20261029_212237.png", caption: "Centralized Admin Management Dashboard" }
+      { src: "/screenshot_20261029_211628.png", caption: "Storefront Home Page & Featured Catalog" },
+      { src: "/screenshot_20261029_211853.png", caption: "Custom Design Selection & Configuration" },
+      { src: "/screenshot_20261029_212032.png", caption: "Streamlined Checkout & Order Summary" },
+      { src: "/screenshot_20261029_212059.png", caption: "Stripe Secure Payment Integration" },
+      { src: "/screenshot_20261029_212204.png", caption: "Order Tracking & Detailed Breakdown" },
+      { src: "/screenshot_20261029_212237.png", caption: "Centralized Admin Management Dashboard" }
     ]
   }
 ];
@@ -350,12 +351,15 @@ export default function ProjectsSection() {
                 {/* Left Side: Main Big Image Display */}
                 <div className="lg:col-span-8 xl:col-span-9 bg-[#0b0b0e] relative flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
                   
-                  {/* Image Frame */}
+                  {/* Image Frame using Next.js Image */}
                   <div className="relative w-full h-full flex items-center justify-center">
-                    <img 
+                    <Image 
                       src={activeProjectModal.images[activeProjectModal.currentIndex].src} 
                       alt={activeProjectModal.images[activeProjectModal.currentIndex].caption}
-                      className="max-h-full max-w-full object-contain rounded-xl shadow-2xl border border-[#27272a]/60"
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 75vw"
+                      className="object-contain rounded-xl shadow-2xl border border-[#27272a]/60 p-2"
+                      priority
                     />
 
                     {/* Navigation Arrows */}
@@ -363,13 +367,13 @@ export default function ProjectsSection() {
                       <>
                         <button 
                           onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
-                          className="absolute left-3 p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
+                          className="absolute left-3 z-20 p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
                         >
                           <ChevronLeft className="w-6 h-6" />
                         </button>
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
-                          className="absolute right-3 p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
+                          className="absolute right-3 z-20 p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
                         >
                           <ChevronRight className="w-6 h-6" />
                         </button>
@@ -378,7 +382,7 @@ export default function ProjectsSection() {
                   </div>
 
                   {/* Bottom Caption Bar */}
-                  <div className="absolute bottom-4 inset-x-6 bg-[#18181b]/80 backdrop-blur-md border border-[#27272a] px-4 py-2.5 rounded-xl text-center">
+                  <div className="absolute bottom-4 inset-x-6 z-20 bg-[#18181b]/80 backdrop-blur-md border border-[#27272a] px-4 py-2.5 rounded-xl text-center">
                     <p className="text-xs sm:text-sm font-mono text-white font-semibold flex items-center justify-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-[#32CD32]" />
                       {activeProjectModal.images[activeProjectModal.currentIndex].caption}
@@ -407,15 +411,23 @@ export default function ProjectsSection() {
                               : 'bg-[#18181b]/40 border-[#27272a] hover:bg-[#18181b] hover:border-[#3f3f46]'
                           }`}
                         >
+                          {/* Thumbnail Preview using Next.js Image */}
                           <div className="relative w-20 h-14 rounded-lg overflow-hidden bg-[#0e0e10] shrink-0 border border-[#27272a]">
-                            <img src={img.src} alt={img.caption} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                            <Image 
+                              src={img.src} 
+                              alt={img.caption} 
+                              fill 
+                              sizes="80px"
+                              className="object-cover group-hover:scale-105 transition-transform" 
+                            />
                             {isActive && (
-                              <div className="absolute inset-0 bg-[#32CD32]/20 flex items-center justify-center">
+                              <div className="absolute inset-0 bg-[#32CD32]/20 flex items-center justify-center z-10">
                                 <div className="w-2.5 h-2.5 rounded-full bg-[#32CD32] shadow-[0_0_8px_#32CD32]" />
                               </div>
                             )}
                           </div>
 
+                          {/* Thumbnail Info */}
                           <div className="flex-1 min-w-0">
                             <span className="text-[10px] font-mono text-[#32CD32] block mb-0.5">0{idx + 1} / 0{activeProjectModal.images.length}</span>
                             <p className={`text-xs font-mono truncate ${isActive ? 'text-white font-bold' : 'text-[#a1a1aa] group-hover:text-white'}`}>

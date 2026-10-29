@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ArrowUpRight, ShieldCheck } from 'lucide-react';
 
@@ -24,12 +25,24 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative flex items-center justify-center w-3 h-3">
-            <div className="absolute w-full h-full bg-[#32CD32] rounded-full animate-ping opacity-75" />
-            <div className="w-2 h-2 bg-[#32CD32] rounded-full shadow-[0_0_10px_#32CD32]" />
-          </div>
-          <span className="font-['Space_Grotesk'] font-bold text-lg tracking-wider text-white group-hover:text-[#32CD32] transition-colors">
+        {/* Prominent Logo Integration without deleting old code logic */}
+        <Link href="/" className="flex items-center gap-0 group">
+
+
+<div className="relative w-20 h-20 shrink-0">
+  <div className="absolute inset-2 rounded-full bg-[#39FF14]/20 blur-xl" />
+
+  <Image
+    src="/Gemini_Generated_Image_pcc5xqpcc5xqpcc5-removebg-preview.png"
+    alt="Vortex Code Labs Logo"
+    width={140}
+    height={140}
+    className="relative z-10 w-full h-full object-contain drop-shadow-[0_0_6px_rgba(57,255,20,0.2)] group-hover:scale-105 transition-transform duration-300"
+    priority
+  />
+</div>
+
+  <span className="font-['Space_Grotesk'] font-bold text-lg tracking-wider text-white group-hover:text-[#32CD32] transition-colors">
             VORTEX<span className="text-[#32CD32]">.CODE</span>
           </span>
         </Link>
