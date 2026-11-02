@@ -85,30 +85,31 @@ export default function HeroSection() {
               </span>
             </div>
 
-            <div className="py-6 space-y-4 font-mono text-xs">
+            <div className="py-6 space-y-3 font-mono text-xs">
               
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[#18181b]/60 border border-[#27272a]">
+              {/* Responsive Fix: Stack on mobile (flex-col), row on small+ screens (sm:flex-row) */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-4 p-3.5 rounded-lg bg-[#18181b]/60 border border-[#27272a]">
                 <div className="flex items-center gap-3 text-[#a1a1aa]">
-                  <Activity className="w-4 h-4 text-[#32CD32]" />
+                  <Activity className="w-4 h-4 text-[#32CD32] shrink-0" />
                   <span>CONCURRENCY_MODEL</span>
                 </div>
-                <span className="text-white font-bold">Goroutines / Channels</span>
+                <span className="text-white font-bold pl-7 sm:pl-0">Goroutines / Channels</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[#18181b]/60 border border-[#27272a]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-4 p-3.5 rounded-lg bg-[#18181b]/60 border border-[#27272a]">
                 <div className="flex items-center gap-3 text-[#a1a1aa]">
-                  <Database className="w-4 h-4 text-[#32CD32]" />
+                  <Database className="w-4 h-4 text-[#32CD32] shrink-0" />
                   <span>DB_ENGINE</span>
                 </div>
-                <span className="text-white font-bold">PostgreSQL / Neon / ACID</span>
+                <span className="text-white font-bold pl-7 sm:pl-0">PostgreSQL / Neon / ACID</span>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[#18181b]/60 border border-[#27272a]">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-4 p-3.5 rounded-lg bg-[#18181b]/60 border border-[#27272a]">
                 <div className="flex items-center gap-3 text-[#a1a1aa]">
-                  <GitBranch className="w-4 h-4 text-[#32CD32]" />
+                  <GitBranch className="w-4 h-4 text-[#32CD32] shrink-0" />
                   <span>ARCHITECTURE</span>
                 </div>
-                <span className="text-white font-bold">Clean Architecture</span>
+                <span className="text-white font-bold pl-7 sm:pl-0">Clean Architecture</span>
               </div>
 
             </div>

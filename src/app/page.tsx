@@ -10,6 +10,7 @@ import TechStackSection from '@/components/TechStackSection';
 import ProjectsSection from '@/components/ProjectsSection';
 import ContactSection from '@/components/ContactSection';
 import Footer from '@/components/Footer';
+import FAQSection from '@/components/FAQSection';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,6 +27,7 @@ export default function Home() {
         <ArchitectureSection/>
         <TechStackSection/>   
         <ProjectsSection/>  
+        <FAQSection/>
         <ContactSection/>
         <Footer/>
       </div>

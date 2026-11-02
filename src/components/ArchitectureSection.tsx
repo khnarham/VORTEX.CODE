@@ -56,7 +56,8 @@ export default function ArchitectureSection() {
         </motion.h2>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Grid Layout: 1 col on mobile, 2 cols on md (3rd card starts at row 2 col 1), 3 cols on lg */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {archLayers.map((layer, index) => (
           <motion.div
             key={index}
@@ -71,7 +72,7 @@ export default function ArchitectureSection() {
               transition: { duration: 0.3 } 
             }}
             style={{ perspective: 1000 }}
-            className="relative p-8 rounded-2xl bg-[#121216]/90 border border-[#27272a] backdrop-blur-xl shadow-2xl flex flex-col justify-between group overflow-hidden"
+            className="relative p-6 sm:p-8 rounded-2xl bg-[#121216]/90 border border-[#27272a] backdrop-blur-xl shadow-2xl flex flex-col justify-between group overflow-hidden"
           >
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#32CD32] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -94,9 +95,10 @@ export default function ArchitectureSection() {
               </p>
             </div>
 
-            <div className="pt-4 border-t border-[#27272a] flex items-center justify-between text-xs font-mono">
+            {/* Responsive Footer */}
+            <div className="pt-4 border-t border-[#27272a] flex flex-col sm:flex-row md:flex-col lg:flex-row items-start sm:items-center md:items-start lg:items-center justify-between gap-1.5 sm:gap-2 text-xs font-mono">
               <span className="text-[#71717a]">Stack:</span>
-              <span className="text-[#32CD32] font-semibold">{layer.tech}</span>
+              <span className="text-[#32CD32] font-semibold text-right sm:text-left md:text-right lg:text-left">{layer.tech}</span>
             </div>
 
             <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-[#32CD32]/5 rounded-full blur-3xl group-hover:bg-[#32CD32]/15 transition-all duration-500" />

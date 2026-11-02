@@ -8,18 +8,38 @@ export default function ContactSection() {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    setTimeout(() => {
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formState),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Message send nahi ho saka.');
+      }
+
       setIsSubmitting(false);
       setIsSubmitted(true);
       setFormState({ name: '', email: '', message: '' });
-      
+
       setTimeout(() => setIsSubmitted(false), 5000);
-    }, 1200);
+    } catch (error: any) {
+      console.error('Submission error:', error);
+      setIsSubmitting(false);
+      setErrorMessage(error.message || 'Kuch technical issue aa gaya hai.');
+    }
   };
 
   return (
@@ -53,7 +73,7 @@ export default function ContactSection() {
           <div className="space-y-4 font-mono text-xs text-[#a1a1aa]">
             <div className="flex items-center gap-3 p-3 rounded-xl bg-[#121216] border border-[#27272a]">
               <Mail className="w-4 h-4 text-[#32CD32]" />
-              <span>Direct: Build@VortexCode.in</span>
+              <span>Direct: arham.khan@vortexcodelabs.com</span>
             </div>
             <div className="flex items-center gap-3 p-3 rounded-xl bg-[#121216] border border-[#27272a]">
               <span className="w-2 h-2 rounded-full bg-[#32CD32] animate-pulse" />
@@ -125,6 +145,10 @@ export default function ContactSection() {
                     className="w-full px-4 py-3.5 rounded-xl bg-[#18181b] border border-[#27272a] text-white font-mono text-sm focus:outline-none focus:border-[#32CD32] transition-colors resize-none"
                   />
                 </div>
+
+                {errorMessage && (
+                  <p className="text-xs font-mono text-red-500">{errorMessage}</p>
+                )}
 
                 <motion.button 
                   whileHover={{ scale: 1.01 }}

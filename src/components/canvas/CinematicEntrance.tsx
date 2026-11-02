@@ -90,19 +90,20 @@ export default function CinematicEntrance({ onComplete }: { onComplete: () => vo
 
       <div className="relative z-20 flex flex-col items-center text-center px-4">
         <div className="mb-4 overflow-hidden">
-          <span className="inline-block font-mono text-xs uppercase tracking-[0.3em] text-[#3f3f46] animate-pulse">
-            [ SYSTEM_INITIALIZATION ]
-          </span>
-        </div>
-
+  <div className="inline-flex items-center gap-2 font-['JetBrains_Mono'] text-xs text-[#71717a] bg-[#121216] px-3 py-1 rounded-md border border-[#27272a]">
+    <span className="text-[#32CD32] font-bold">&gt;_</span>
+    <span className="tracking-[0.2em] uppercase text-[#a1a1aa]">
+      SYS_INIT <span className="text-[#32CD32] animate-pulse">// READY</span>
+    </span>
+  </div>
+</div>
         <h1 className="font-mono font-extrabold text-5xl md:text-7xl tracking-tighter text-white mb-2">
           VORTEX<span className="text-[#32CD32]">.CODE</span>
         </h1>
         
-        <p className="font-sans text-sm text-[#a1a1aa] tracking-widest uppercase mb-12">
-          Architecture & Engineering Studio
-        </p>
-
+<p className="font-sans text-sm text-[#a1a1aa] tracking-widest uppercase mb-12">
+  Delivering Scalable System Solutions for Growing Businesses
+</p>
         <div className="flex items-center gap-6 w-72 max-w-full">
           <div className="flex-grow h-[2px] bg-[#18181b] relative overflow-hidden rounded-full">
             <div

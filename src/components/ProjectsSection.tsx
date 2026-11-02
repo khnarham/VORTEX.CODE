@@ -191,7 +191,7 @@ export default function ProjectsSection() {
               y: -6, 
               transition: { duration: 0.3 } 
             }}
-            className="relative p-8 sm:p-12 rounded-3xl bg-[#121216]/90 border border-[#27272a] backdrop-blur-xl shadow-2xl overflow-hidden group"
+            className="relative p-4 sm:p-12 rounded-3xl bg-[#121216]/90 border border-[#27272a] backdrop-blur-xl shadow-2xl overflow-hidden group"
           >
             {/* Top Green Gradient Accent Bar */}
             <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#32CD32] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -299,10 +299,10 @@ export default function ProjectsSection() {
         ))}
       </div>
 
-      {/* YouTube-Style Theater Playlist Popup Modal */}
+      {/* YouTube-Style Theater Playlist Popup Modal - Fully Responsive & Non-Overflowing */}
       <AnimatePresence>
         {activeProjectModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 lg:p-8">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 lg:p-6">
             
             {/* Dark Backdrop */}
             <motion.div
@@ -310,7 +310,7 @@ export default function ProjectsSection() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveProjectModal(null)}
-              className="fixed inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
+              className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
             />
 
             {/* Modal Container */}
@@ -319,19 +319,19 @@ export default function ProjectsSection() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-7xl h-[92vh] sm:h-[88vh] bg-[#121216] border border-[#3f3f46] rounded-3xl shadow-2xl z-10 overflow-hidden flex flex-col"
+              className="relative w-full max-w-7xl h-[95vh] sm:h-[90vh] bg-[#121216] border border-[#3f3f46] rounded-2xl sm:rounded-3xl shadow-2xl z-10 flex flex-col overflow-hidden"
             >
               {/* Modal Top Bar */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-[#27272a] bg-[#18181b]/90 shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-[#32CD32]/10 border border-[#32CD32]/30 text-[#32CD32]">
+              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-[#27272a] bg-[#18181b]/90 shrink-0">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="p-2 rounded-lg bg-[#32CD32]/10 border border-[#32CD32]/30 text-[#32CD32] shrink-0">
                     <Sparkles className="w-4 h-4" />
                   </div>
-                  <div>
-                    <h3 className="text-sm sm:text-lg font-extrabold text-white font-['Space_Grotesk'] truncate max-w-xs sm:max-w-xl">
+                  <div className="min-w-0">
+                    <h3 className="text-xs sm:text-base font-extrabold text-white font-['Space_Grotesk'] truncate">
                       {activeProjectModal.title}
                     </h3>
-                    <p className="text-[11px] font-mono text-[#32CD32]">
+                    <p className="text-[10px] sm:text-[11px] font-mono text-[#32CD32] truncate">
                       Screenshot {activeProjectModal.currentIndex + 1} of {activeProjectModal.images.length} — {activeProjectModal.images[activeProjectModal.currentIndex].caption}
                     </p>
                   </div>
@@ -339,17 +339,17 @@ export default function ProjectsSection() {
 
                 <button
                   onClick={() => setActiveProjectModal(null)}
-                  className="p-2.5 rounded-xl bg-[#121216] border border-[#3f3f46] text-[#a1a1aa] hover:text-white hover:bg-[#27272a] transition-all cursor-pointer"
+                  className="p-2 sm:p-2.5 rounded-xl bg-[#121216] border border-[#3f3f46] text-[#a1a1aa] hover:text-white hover:bg-[#27272a] transition-all cursor-pointer shrink-0 ml-2"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Theater Mode Layout */}
-              <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+              {/* Theater Mode Layout - Clean & Fixed */}
+              <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-0 overflow-hidden">
                 
                 {/* Left Side: Main Big Image Display */}
-                <div className="lg:col-span-8 xl:col-span-9 bg-[#0b0b0e] relative flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden">
+                <div className="lg:col-span-8 xl:col-span-9 bg-[#0b0b0e] relative flex flex-col items-center justify-center p-3 sm:p-6 pb-16 sm:pb-20 min-h-[220px] lg:min-h-0 overflow-hidden">
                   
                   {/* Image Frame using Next.js Image */}
                   <div className="relative w-full h-full flex items-center justify-center">
@@ -367,52 +367,52 @@ export default function ProjectsSection() {
                       <>
                         <button 
                           onClick={(e) => { e.stopPropagation(); handlePrevImage(); }}
-                          className="absolute left-3 z-20 p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
+                          className="absolute left-2 sm:left-4 z-20 p-2.5 sm:p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
                         >
-                          <ChevronLeft className="w-6 h-6" />
+                          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
                         </button>
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleNextImage(); }}
-                          className="absolute right-3 z-20 p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
+                          className="absolute right-2 sm:right-4 z-20 p-2.5 sm:p-3 rounded-full bg-[#18181b]/90 border border-[#3f3f46] text-white hover:bg-[#32CD32] hover:text-[#0e0e10] transition-all cursor-pointer shadow-xl"
                         >
-                          <ChevronRight className="w-6 h-6" />
+                          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
                         </button>
                       </>
                     )}
                   </div>
 
                   {/* Bottom Caption Bar */}
-                  <div className="absolute bottom-4 inset-x-6 z-20 bg-[#18181b]/80 backdrop-blur-md border border-[#27272a] px-4 py-2.5 rounded-xl text-center">
-                    <p className="text-xs sm:text-sm font-mono text-white font-semibold flex items-center justify-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-[#32CD32]" />
-                      {activeProjectModal.images[activeProjectModal.currentIndex].caption}
+                  <div className="absolute bottom-2 sm:bottom-3 inset-x-4 sm:inset-x-6 z-20 bg-[#18181b]/95 backdrop-blur-md border border-[#27272a] px-3 sm:px-4 py-2 rounded-xl text-center shadow-lg">
+                    <p className="text-[11px] sm:text-xs font-mono text-white font-semibold flex items-center justify-center gap-2 truncate">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#32CD32] shrink-0" />
+                      <span className="truncate">{activeProjectModal.images[activeProjectModal.currentIndex].caption}</span>
                     </p>
                   </div>
                 </div>
 
                 {/* Right Side: Scrollable Playlist */}
-                <div className="lg:col-span-4 xl:col-span-3 bg-[#121216] border-t lg:border-t-0 lg:border-l border-[#27272a] flex flex-col h-64 lg:h-full overflow-hidden">
-                  <div className="p-4 border-b border-[#27272a] bg-[#18181b]/60 shrink-0">
-                    <h4 className="text-xs font-mono text-[#a1a1aa] font-bold tracking-wider uppercase">
+                <div className="lg:col-span-4 xl:col-span-3 bg-[#121216] border-t lg:border-t-0 lg:border-l border-[#27272a] flex flex-col h-60 lg:h-48 lg:h-full min-h-0 overflow-hidden shrink-0">
+                  <div className="p-2.5 sm:p-4 border-b border-[#27272a] bg-[#18181b]/60 shrink-0">
+                    <h4 className="text-[11px] sm:text-xs font-mono text-[#a1a1aa] font-bold tracking-wider uppercase">
                       System Screenshots ({activeProjectModal.images.length})
                     </h4>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto p-3 space-y-2.5 custom-scrollbar">
+                  <div className="flex-1 overflow-y-auto p-2 sm:p-3 space-y-2">
                     {activeProjectModal.images.map((img, idx) => {
                       const isActive = activeProjectModal.currentIndex === idx;
                       return (
                         <div
                           key={idx}
                           onClick={() => setActiveProjectModal(prev => ({ ...prev!, currentIndex: idx }))}
-                          className={`group flex items-center gap-3 p-2 rounded-xl transition-all cursor-pointer border ${
+                          className={`group flex items-center gap-2.5 p-2 rounded-xl transition-all cursor-pointer border ${
                             isActive 
                               ? 'bg-[#18181b] border-[#32CD32] shadow-[0_0_15px_rgba(50,205,50,0.15)]' 
                               : 'bg-[#18181b]/40 border-[#27272a] hover:bg-[#18181b] hover:border-[#3f3f46]'
                           }`}
                         >
                           {/* Thumbnail Preview using Next.js Image */}
-                          <div className="relative w-20 h-14 rounded-lg overflow-hidden bg-[#0e0e10] shrink-0 border border-[#27272a]">
+                          <div className="relative w-14 h-10 sm:w-20 sm:h-14 rounded-lg overflow-hidden bg-[#0e0e10] shrink-0 border border-[#27272a]">
                             <Image 
                               src={img.src} 
                               alt={img.caption} 
@@ -422,14 +422,14 @@ export default function ProjectsSection() {
                             />
                             {isActive && (
                               <div className="absolute inset-0 bg-[#32CD32]/20 flex items-center justify-center z-10">
-                                <div className="w-2.5 h-2.5 rounded-full bg-[#32CD32] shadow-[0_0_8px_#32CD32]" />
+                                <div className="w-2 h-2 rounded-full bg-[#32CD32] shadow-[0_0_8px_#32CD32]" />
                               </div>
                             )}
                           </div>
 
                           {/* Thumbnail Info */}
                           <div className="flex-1 min-w-0">
-                            <span className="text-[10px] font-mono text-[#32CD32] block mb-0.5">0{idx + 1} / 0{activeProjectModal.images.length}</span>
+                            <span className="text-[9px] sm:text-[10px] font-mono text-[#32CD32] block mb-0.5">0{idx + 1} / 0{activeProjectModal.images.length}</span>
                             <p className={`text-xs font-mono truncate ${isActive ? 'text-white font-bold' : 'text-[#a1a1aa] group-hover:text-white'}`}>
                               {img.caption}
                             </p>
@@ -443,13 +443,13 @@ export default function ProjectsSection() {
               </div>
 
               {/* Modal Footer */}
-              <div className="flex items-center justify-between px-6 py-3 border-t border-[#27272a] bg-[#18181b]/90 shrink-0 text-xs font-mono">
+              <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 border-t border-[#27272a] bg-[#18181b]/90 shrink-0 text-xs font-mono">
                 <span className="text-[#71717a] hidden sm:inline">
                   Tip: Use the side playlist or arrow keys to navigate through system workflows.
                 </span>
                 <button
                   onClick={() => setActiveProjectModal(null)}
-                  className="ml-auto px-6 py-2 rounded-lg bg-[#32CD32] text-[#0e0e10] font-bold hover:bg-[#2db82d] transition-all cursor-pointer shadow-[0_0_15px_rgba(50,205,50,0.25)]"
+                  className="ml-auto px-5 py-1.5 sm:py-2 rounded-lg bg-[#32CD32] text-[#0e0e10] font-bold hover:bg-[#2db82d] transition-all cursor-pointer shadow-[0_0_15px_rgba(50,205,50,0.25)] text-xs"
                 >
                   Close Theater
                 </button>
