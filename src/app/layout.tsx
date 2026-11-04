@@ -18,12 +18,15 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata = {
   title: 'VortexCode',
   description: 'Solution for Bussiness to Improve their application performance',
-  icon: [
+
+    icons: {
+    icon: [
       {
-        url: '/favicon.svg',
-        type: 'image/svg+xml',
+        url: '/favicon.ico',
+        sizes: 'any',
       },
     ],
+  },
 }
 
 export default function RootLayout({
