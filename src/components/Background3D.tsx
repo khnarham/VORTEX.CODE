@@ -12,100 +12,117 @@ export default function Background3D() {
     if (!ctx) return;
 
     let animationFrameId: number;
+    let isVisible = true;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const cols = 30;
-    const rows = 20;
-    let spacingX = width / cols;
-    let spacingY = height / rows;
+    // Spaced out dots for a clean look
+    const spacing = 45; 
+    let cols = Math.floor(width / spacing);
+    let rows = Math.floor(height / spacing);
 
-    let points: { x: number; y: number; originX: number; originY: number; z: number }[] = [];
+    let points: { x: number; y: number }[] = [];
 
     const initPoints = () => {
       points = [];
-      spacingX = width / cols;
-      spacingY = height / rows;
+      cols = Math.floor(width / spacing);
+      rows = Math.floor(height / spacing);
+      
+      const offsetX = (width - cols * spacing) / 2;
+      const offsetY = (height - rows * spacing) / 2;
+
       for (let i = 0; i <= cols; i++) {
         for (let j = 0; j <= rows; j++) {
-          const x = i * spacingX;
-          const y = j * spacingY;
-          points.push({ x, y, originX: x, originY: y, z: Math.random() * 50 });
+          points.push({
+            x: offsetX + i * spacing,
+            y: offsetY + j * spacing,
+          });
         }
       }
     };
 
     initPoints();
 
+    let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-      initPoints();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (!canvas) return;
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        initPoints();
+      }, 150);
     };
 
     window.addEventListener('resize', handleResize);
 
-    let mouseX = width / 2;
-    let mouseY = height / 2;
+    let targetMouseX = -1000;
+    let targetMouseY = -1000;
+    let currentMouseX = -1000;
+    let currentMouseY = -1000;
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      targetMouseX = e.clientX;
+      targetMouseY = e.clientY;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
+    const handleMouseLeave = () => {
+      targetMouseX = -1000;
+      targetMouseY = -1000;
+    };
 
-    let angle = 0;
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseleave', handleMouseLeave);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible = entry.isIntersecting;
+        if (isVisible && !animationFrameId) {
+          render();
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(canvas);
 
     const render = () => {
+      if (!isVisible) {
+        animationFrameId = 0;
+        return;
+      }
+
       ctx.clearRect(0, 0, width, height);
 
-      const centerOffsetX = (mouseX - width / 2) * 0.05;
-      const centerOffsetY = (mouseY - height / 2) * 0.05;
+      // Smooth mouse interpolation for the highlight aura
+      currentMouseX += (targetMouseX - currentMouseX) * 0.08;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.08;
 
-      angle += 0.015;
+      const maxDist = 150; // Aura radius around mouse
 
-      points.forEach((pt, index) => {
-        const wave = Math.sin(angle + pt.originX * 0.01) * 15;
-        pt.y = pt.originY + wave;
+      points.forEach((pt) => {
+        const dx = currentMouseX - pt.x;
+        const dy = currentMouseY - pt.y;
+        const distSq = dx * dx + dy * dy;
 
-        const dx = mouseX - pt.x;
-        const dy = mouseY - pt.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        let pullX = 0;
-        let pullY = 0;
+        // Increased default prominence for background dots (0.15 -> 0.35)
+        let alpha = 0.35; 
+        let radius = 1.3;  // Slightly larger default dot size
 
-        if (dist < 150) {
-          const force = (150 - dist) / 150;
-          pullX = -dx * force * 0.2;
-          pullY = -dy * force * 0.2;
+        // Highlight effect near the mouse cursor
+        if (distSq < maxDist * maxDist) {
+          const dist = Math.sqrt(distSq);
+          const factor = 1 - dist / maxDist;
+          alpha = 0.35 + factor * 0.5; // Brighter near mouse
+          radius = 1.3 + factor * 1.0;   // Noticeably larger near mouse
         }
 
-        const currentX = pt.x + pullX + centerOffsetX * 0.2;
-        const currentY = pt.y + pullY + centerOffsetY * 0.2;
-
         ctx.beginPath();
-        ctx.arc(currentX, currentY, 1.2, 0, Math.PI * 2);
-        ctx.fillStyle = dist < 150 ? '#32CD32' : 'rgba(161, 161, 170, 0.25)';
+        ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
+        
+        // Use clean neutral grey/zinc dots with bright neon green accent on hover
+        ctx.fillStyle = alpha > 0.5 ? `rgba(50, 205, 50, ${alpha})` : `rgba(161, 161, 170, ${alpha})`;
         ctx.fill();
-
-        points.forEach((otherPt, otherIdx) => {
-          if (otherIdx > index) {
-            const odx = otherPt.x - pt.x;
-            const ody = otherPt.y - pt.y;
-            const oDist = Math.sqrt(odx * odx + ody * ody);
-
-            if (oDist < spacingX * 1.4) {
-              ctx.beginPath();
-              ctx.moveTo(currentX, currentY);
-              ctx.lineTo(otherPt.x + centerOffsetX * 0.2, otherPt.y + centerOffsetY * 0.2);
-              ctx.strokeStyle = dist < 150 ? 'rgba(50, 205, 50, 0.3)' : 'rgba(255, 255, 255, 0.02)';
-              ctx.lineWidth = dist < 150 ? 0.8 : 0.4;
-              ctx.stroke();
-            }
-          }
-        });
       });
 
       animationFrameId = requestAnimationFrame(render);
@@ -116,14 +133,18 @@ export default function Background3D() {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      if (canvas) observer.unobserve(canvas);
       cancelAnimationFrame(animationFrameId);
+      clearTimeout(resizeTimeout);
     };
   }, []);
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-      <canvas ref={canvasRef} className="block w-full h-full opacity-80" />
-      <div className="absolute inset-0 bg-radial-gradient from-transparent via-[#0e0e10]/60 to-[#0e0e10] pointer-events-none" />
+      {/* Increased opacity-70 to opacity-90 for sharper background visibility */}
+      <canvas ref={canvasRef} className="block w-full h-full opacity-90" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,#0e0e10_90%)] pointer-events-none" />
     </div>
   );
 }

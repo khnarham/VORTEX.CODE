@@ -1,6 +1,6 @@
 'use client';
 
-import  { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Points, PointMaterial } from '@react-three/drei';
 import * as THREE from 'three';
@@ -14,36 +14,33 @@ function generateSpherePoints(count: number, radius: number) {
     const phi = Math.acos(2.0 * v - 1.0);
     const r = radius * Math.cbrt(Math.random());
 
-    const x = r * Math.sin(phi) * Math.cos(theta);
-    const y = r * Math.sin(phi) * Math.sin(theta);
-    const z = r * Math.cos(phi);
-
-    points[i * 3] = x;
-    points[i * 3 + 1] = y;
-    points[i * 3 + 2] = z;
+    points[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+    points[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+    points[i * 3 + 2] = r * Math.cos(phi);
   }
   return points;
 }
 
-function ParticleVortex(props: any) {
-  const ref = useRef<any>(null);
-  const [sphere] = useState(() => generateSpherePoints(5000, 1.5));
+function ParticleVortex() {
+  const ref = useRef<THREE.Points>(null);
+  // Reduced particle count from 5000 to 2500 for buttery-smooth mobile/desktop rendering
+  const [sphere] = useState(() => generateSpherePoints(2500, 1.5));
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (ref.current) {
-      ref.current.rotation.x -= delta / 10;
-      ref.current.rotation.y -= delta / 15;
+      ref.current.rotation.x -= delta / 12;
+      ref.current.rotation.y -= delta / 18;
     }
   });
 
   return (
     <group rotation={[0, 0, Math.PI / 4]}>
-      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+      <Points ref={ref} positions={sphere} stride={3} frustumCulled>
         <PointMaterial
           transparent
           color="#32CD32"
-          size={0.004}
-          sizeAttenuation={true}
+          size={0.0045}
+          sizeAttenuation
           depthWrite={false}
           blending={THREE.AdditiveBlending}
         />
@@ -57,31 +54,41 @@ export default function CinematicEntrance({ onComplete }: { onComplete: () => vo
   const [exitAnimation, setExitAnimation] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setExitAnimation(true);
-            setTimeout(onComplete, 1000); 
-          }, 400);
-          return 100;
-        }
-        return prev + 2;
-      });
-    }, 30); 
+    // Smoother requestAnimationFrame or slightly wider interval to reduce CPU load
+    const startTime = performance.now();
+    const duration = 1500; // 1.5 seconds intro duration
 
-    return () => clearInterval(interval);
+    let animationFrameId: number;
+
+    const updateProgress = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const currentProgress = Math.min(Math.floor((elapsed / duration) * 100), 100);
+
+      setProgress(currentProgress);
+
+      if (currentProgress < 100) {
+        animationFrameId = requestAnimationFrame(updateProgress);
+      } else {
+        setTimeout(() => {
+          setExitAnimation(true);
+          setTimeout(onComplete, 800);
+        }, 300);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(updateProgress);
+
+    return () => cancelAnimationFrame(animationFrameId);
   }, [onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0e0e10] transition-opacity duration-1000 ${
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0e0e10] transition-opacity duration-800 ${
         exitAnimation ? 'opacity-0 pointer-events-none scale-105' : 'opacity-100 scale-100'
       }`}
     >
-      <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0, 1] }}>
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <Canvas camera={{ position: [0, 0, 1] }} dpr={[1, 2]}>
           <ParticleVortex />
         </Canvas>
       </div>
@@ -90,20 +97,21 @@ export default function CinematicEntrance({ onComplete }: { onComplete: () => vo
 
       <div className="relative z-20 flex flex-col items-center text-center px-4">
         <div className="mb-4 overflow-hidden">
-  <div className="inline-flex items-center gap-2 font-['JetBrains_Mono'] text-xs text-[#71717a] bg-[#121216] px-3 py-1 rounded-md border border-[#27272a]">
-    <span className="text-[#32CD32] font-bold">&gt;_</span>
-    <span className="tracking-[0.2em] uppercase text-[#a1a1aa]">
-      SYS_INIT <span className="text-[#32CD32] animate-pulse">// READY</span>
-    </span>
-  </div>
-</div>
+          <div className="inline-flex items-center gap-2 font-['JetBrains_Mono'] text-xs text-[#71717a] bg-[#121216] px-3 py-1 rounded-md border border-[#27272a]">
+            <span className="text-[#32CD32] font-bold">&gt;_</span>
+            <span className="tracking-[0.2em] uppercase text-[#a1a1aa]">
+              SYS_INIT <span className="text-[#32CD32] animate-pulse">// READY</span>
+            </span>
+          </div>
+        </div>
         <h1 className="font-mono font-extrabold text-5xl md:text-7xl tracking-tighter text-white mb-2">
           VORTEX<span className="text-[#32CD32]">.CODE</span>
         </h1>
         
-<p className="font-sans text-sm text-[#a1a1aa] tracking-widest uppercase mb-12">
-  Delivering Scalable System Solutions for Growing Businesses
-</p>
+        <p className="font-sans text-sm text-[#a1a1aa] tracking-widest uppercase mb-12">
+          Delivering Scalable System Solutions for Growing Businesses
+        </p>
+
         <div className="flex items-center gap-6 w-72 max-w-full">
           <div className="flex-grow h-[2px] bg-[#18181b] relative overflow-hidden rounded-full">
             <div
@@ -117,7 +125,7 @@ export default function CinematicEntrance({ onComplete }: { onComplete: () => vo
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-8 right-8 flex justify-between items-center text-[10px] font-mono text-[#3f3f46] z-20 hidden sm:flex">
+      <div className="absolute bottom-8 left-8 right-8 justify-between items-center text-[10px] font-mono text-[#3f3f46] z-20 hidden sm:flex">
         <span>LOC: GLOBAL / REMOTE</span>
         <span>EXPERIENCE: 2026 EDITION</span>
         <span>AWARDS: NOMINEE READY</span>

@@ -1,8 +1,8 @@
 'use client';
 
-import  { useRef } from 'react';
+import { useRef } from 'react';
 import { Canvas, useFrame, extend } from '@react-three/fiber';
-import { shaderMaterial, Text } from '@react-three/drei';
+import { shaderMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 const vertexShader = `
@@ -18,24 +18,12 @@ const fragmentShader = `
   uniform vec2 uResolution;
   varying vec2 vUv;
 
-  // Matrix Code Rain function (simplified)
-  float character(vec2 st, float index) {
-      // This is a placeholder for a real character texture, 
-      // but for this example, we'll use a simple noise pattern.
-      return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453) > 0.98 ? 1.0 : 0.0;
+  // Helper function defined BEFORE usage to prevent GLSL compilation errors
+  float random (vec2 st) {
+    return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
   }
 
   void main() {
-    vec2 st = vUv * 20.0; // Grid scale
-    vec2 ipos = floor(st);
-    vec2 fpos = fract(st);
-    
-    // Time-based scrolling
-    float speed = uTime * 2.0;
-    float offset = random(ipos); 
-    float y = fract(speed + offset);
-    
-    // Digital Vortex effect (warp grid based on distance from center)
     vec2 center = vUv - 0.5;
     float dist = length(center);
     float angle = atan(center.y, center.x);
@@ -45,19 +33,20 @@ const fragmentShader = `
     vortexUv.x += cos(angle + uTime) * dist * 0.2;
     vortexUv.y += sin(angle + uTime) * dist * 0.2;
 
-    // Re-calculate grid with vortex distortion
-    st = vortexUv * 25.0;
-    ipos = floor(st);
-    fpos = fract(st);
-    y = fract(uTime * 0.5 + random(ipos));
+    // Grid scale & time-based scrolling
+    vec2 st = vortexUv * 25.0;
+    vec2 ipos = floor(st);
+    vec2 fpos = fract(st);
+    
+    float rnd = random(ipos);
+    float y = fract(uTime * 0.5 + rnd);
 
-    // Matrix Rain Color
-    vec3 green = vec3(0.2, 0.8, 0.2); // #32CD32 adjusted
+    // Matrix Rain Color (#32CD32 adjusted)
+    vec3 green = vec3(0.2, 0.8, 0.2); 
     vec3 black = vec3(0.0, 0.0, 0.0);
     
-    // Character intensity based on vertical position and time
-    float char = character(fpos, y);
-    float intensity = step(0.85, y) * char;
+    // Character intensity based on vertical position
+    float intensity = step(0.85, y);
     
     // Vortex Center Fade
     intensity *= smoothstep(0.5, 0.1, dist);
@@ -66,13 +55,6 @@ const fragmentShader = `
 
     gl_FragColor = vec4(finalColor, 1.0);
   }
-  
-  // Helper function required by fragment shader above
-  float random (vec2 st) {
-    return fract(sin(dot(st.xy,
-                         vec2(12.9898,78.233)))*
-        43758.5453123);
-}
 `;
 
 const MatrixVortexMaterial = shaderMaterial(
@@ -83,18 +65,27 @@ const MatrixVortexMaterial = shaderMaterial(
 
 extend({ MatrixVortexMaterial });
 
+// Declare custom element for TypeScript JSX
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      matrixVortexMaterial: any;
+    }
+  }
+}
+
 function VortexPlane() {
   const materialRef = useRef<any>(null);
 
   useFrame(({ clock, viewport }) => {
     if (materialRef.current) {
       materialRef.current.uTime = clock.getElapsedTime();
-      materialRef.current.uResolution = new THREE.Vector2(viewport.width, viewport.height);
+      materialRef.current.uResolution.set(viewport.width, viewport.height);
     }
   });
 
   return (
-    <mesh scale={[10, 10, 1]}>
+    <mesh scale={[12, 12, 1]}>
       <planeGeometry args={[1, 1]} />
       {/* @ts-ignore */}
       <matrixVortexMaterial ref={materialRef} />
@@ -104,8 +95,8 @@ function VortexPlane() {
 
 export default function EntranceGlitch() {
   return (
-    <div className="absolute inset-0 z-0">
-      <Canvas camera={{ position: [0, 0, 5] }}>
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <Canvas camera={{ position: [0, 0, 5] }} dpr={[1, 2]}>
         <VortexPlane />
       </Canvas>
     </div>

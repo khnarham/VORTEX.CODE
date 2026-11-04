@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { 
@@ -37,6 +37,7 @@ interface Project {
   images: ProjectImage[];
 }
 
+// 1. Moved outside component scope to prevent unnecessary re-allocation on every render
 const projects: Project[] = [
   {
     id: "clinical-system",
@@ -133,21 +134,39 @@ export default function ProjectsSection() {
     currentIndex: number;
   } | null>(null);
 
-  const handleNextImage = () => {
-    if (!activeProjectModal) return;
-    setActiveProjectModal(prev => ({
-      ...prev!,
-      currentIndex: (prev!.currentIndex + 1) % prev!.images.length
-    }));
-  };
+  const handleNextImage = useCallback(() => {
+    setActiveProjectModal(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        currentIndex: (prev.currentIndex + 1) % prev.images.length
+      };
+    });
+  }, []);
 
-  const handlePrevImage = () => {
+  const handlePrevImage = useCallback(() => {
+    setActiveProjectModal(prev => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        currentIndex: (prev.currentIndex - 1 + prev.images.length) % prev.images.length
+      };
+    });
+  }, []);
+
+  // 2. Added keyboard shortcuts (Arrow keys for switching screenshots, Escape for closing modal)
+  useEffect(() => {
     if (!activeProjectModal) return;
-    setActiveProjectModal(prev => ({
-      ...prev!,
-      currentIndex: (prev!.currentIndex - 1 + prev!.images.length) % prev!.images.length
-    }));
-  };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') handleNextImage();
+      if (e.key === 'ArrowLeft') handlePrevImage();
+      if (e.key === 'Escape') setActiveProjectModal(null);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [activeProjectModal, handleNextImage, handlePrevImage]);
 
   return (
     <section id="projects" className="relative max-w-7xl mx-auto px-6 py-28 border-t border-[#27272a]/55">
@@ -261,7 +280,7 @@ export default function ProjectsSection() {
               {/* Right Column: Responsive System Highlights & Developer Note */}
               <div className="lg:col-span-5 flex flex-col justify-between gap-4 font-mono text-xs h-full">
                 
-                {/* System Highlights Box with Responsive Text Layout */}
+                {/* System Highlights Box */}
                 <div className="p-5 sm:p-6 rounded-2xl bg-[#18181b]/80 border border-[#27272a] space-y-3.5">
                   <h4 className="text-white font-bold tracking-wider text-xs sm:text-sm border-b border-[#27272a] pb-3 flex items-center gap-2">
                     <Server className="w-4 h-4 text-[#32CD32] shrink-0" /> SYSTEM HIGHLIGHTS
@@ -299,10 +318,10 @@ export default function ProjectsSection() {
         ))}
       </div>
 
-      {/* YouTube-Style Theater Playlist Popup Modal - Fully Responsive & Non-Overflowing */}
+      {/* Theater Playlist Popup Modal */}
       <AnimatePresence>
         {activeProjectModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 lg:p-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-1 sm:p-4 lg:p-6">
             
             {/* Dark Backdrop */}
             <motion.div
@@ -310,7 +329,7 @@ export default function ProjectsSection() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveProjectModal(null)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-md cursor-pointer"
+              className="absolute inset-0 bg-black/95 backdrop-blur-md cursor-pointer"
             />
 
             {/* Modal Container */}
@@ -319,10 +338,10 @@ export default function ProjectsSection() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="relative w-full max-w-7xl h-[95vh] sm:h-[90vh] bg-[#121216] border border-[#3f3f46] rounded-2xl sm:rounded-3xl shadow-2xl z-10 flex flex-col overflow-hidden"
+              className="relative w-full max-w-7xl h-[92dvh] sm:h-[90vh] bg-[#121216] border border-[#3f3f46] rounded-2xl sm:rounded-3xl shadow-2xl z-10 flex flex-col overflow-hidden"
             >
               {/* Modal Top Bar */}
-              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-[#27272a] bg-[#18181b]/90 shrink-0">
+              <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-[#27272a] bg-[#18181b]/95 backdrop-blur-md shrink-0">
                 <div className="flex items-center gap-3 min-w-0">
                   <div className="p-2 rounded-lg bg-[#32CD32]/10 border border-[#32CD32]/30 text-[#32CD32] shrink-0">
                     <Sparkles className="w-4 h-4" />
@@ -345,13 +364,12 @@ export default function ProjectsSection() {
                 </button>
               </div>
 
-              {/* Theater Mode Layout - Clean & Fixed */}
+              {/* Theater Mode Layout */}
               <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 min-h-0 overflow-hidden">
                 
                 {/* Left Side: Main Big Image Display */}
                 <div className="lg:col-span-8 xl:col-span-9 bg-[#0b0b0e] relative flex flex-col items-center justify-center p-3 sm:p-6 pb-16 sm:pb-20 min-h-[220px] lg:min-h-0 overflow-hidden">
                   
-                  {/* Image Frame using Next.js Image */}
                   <div className="relative w-full h-full flex items-center justify-center">
                     <Image 
                       src={activeProjectModal.images[activeProjectModal.currentIndex].src} 
@@ -391,7 +409,7 @@ export default function ProjectsSection() {
                 </div>
 
                 {/* Right Side: Scrollable Playlist */}
-                <div className="lg:col-span-4 xl:col-span-3 bg-[#121216] border-t lg:border-t-0 lg:border-l border-[#27272a] flex flex-col h-60 lg:h-48 lg:h-full min-h-0 overflow-hidden shrink-0">
+                <div className="lg:col-span-4 xl:col-span-3 bg-[#121216] border-t lg:border-t-0 lg:border-l border-[#27272a] flex flex-col h-40 sm:h-48 lg:h-full min-h-0 overflow-hidden shrink-0">
                   <div className="p-2.5 sm:p-4 border-b border-[#27272a] bg-[#18181b]/60 shrink-0">
                     <h4 className="text-[11px] sm:text-xs font-mono text-[#a1a1aa] font-bold tracking-wider uppercase">
                       System Screenshots ({activeProjectModal.images.length})
@@ -411,7 +429,7 @@ export default function ProjectsSection() {
                               : 'bg-[#18181b]/40 border-[#27272a] hover:bg-[#18181b] hover:border-[#3f3f46]'
                           }`}
                         >
-                          {/* Thumbnail Preview using Next.js Image */}
+                          {/* Thumbnail Preview */}
                           <div className="relative w-14 h-10 sm:w-20 sm:h-14 rounded-lg overflow-hidden bg-[#0e0e10] shrink-0 border border-[#27272a]">
                             <Image 
                               src={img.src} 
@@ -445,7 +463,7 @@ export default function ProjectsSection() {
               {/* Modal Footer */}
               <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 sm:py-3 border-t border-[#27272a] bg-[#18181b]/90 shrink-0 text-xs font-mono">
                 <span className="text-[#71717a] hidden sm:inline">
-                  Tip: Use the side playlist or arrow keys to navigate through system workflows.
+                  Tip: Use arrow keys (← / →) to navigate screenshots or Esc to close.
                 </span>
                 <button
                   onClick={() => setActiveProjectModal(null)}

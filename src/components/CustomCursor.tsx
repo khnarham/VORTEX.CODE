@@ -18,6 +18,9 @@ export default function CustomCursor() {
   const ringYSpring = useSpring(cursorY, ringSpringConfig);
 
   useEffect(() => {
+    // Disable on touch devices to save resources
+    if (window.matchMedia('(pointer: coarse)').matches) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -25,15 +28,16 @@ export default function CustomCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('button') || target.closest('a')) {
+      // Using a lightweight selector match instead of multiple closest checks
+      if (target.closest('a, button, [data-cursor="hover"]')) {
         setIsHovered(true);
       } else {
         setIsHovered(false);
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseover', handleMouseOver, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
@@ -41,10 +45,11 @@ export default function CustomCursor() {
     };
   }, [cursorX, cursorY]);
 
+  // Hidden on mobile/tablets using Tailwind's `hidden md:block` and pointer media query check
   return (
-    <>
+    <div className="hidden md:block pointer-events-none fixed inset-0 z-50 overflow-hidden">
       <motion.div
-        className="fixed top-0 left-0 w-3 h-3 bg-[#32CD32] rounded-full pointer-events-none z-50 mix-blend-difference"
+        className="absolute top-0 left-0 w-3 h-3 bg-[#32CD32] rounded-full mix-blend-difference"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -56,7 +61,7 @@ export default function CustomCursor() {
       />
 
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 border border-[#32CD32]/60 rounded-full pointer-events-none z-50"
+        className="absolute top-0 left-0 w-8 h-8 border border-[#32CD32]/60 rounded-full"
         style={{
           x: ringXSpring,
           y: ringYSpring,
@@ -69,6 +74,6 @@ export default function CustomCursor() {
         }}
         transition={{ duration: 0.15 }}
       />
-    </>
+    </div>
   );
 }
