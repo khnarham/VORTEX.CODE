@@ -51,7 +51,7 @@ const projects: Project[] = [
       { label: "State Sync", value: "Custom Logic with DB Transactions" },
       { label: "Database", value: "Relational ACID" }
     ],
-    githubUrl: "https://github.com/arham-khan",
+    githubUrl: "https://careclinic.vortexcodelabs.com",
     liveUrl: "#",
     detailedNote: "Developed with strict separation of concerns, secure JWT authentication, and transactional email verification via Brevo/Resend.",
     images: [
