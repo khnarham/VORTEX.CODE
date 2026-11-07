@@ -15,10 +15,13 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
+
 export const metadata = {
   title: 'VortexCode',
   description: 'Solution for Bussiness to Improve their application performance',
-
+  verification: {
+    google: '8MY1gp0o7Q7Cb9cvN5gT5mhhbnK6wYP-rCcevBvPRVM'
+  },
     icons: {
     icon: [
       {
